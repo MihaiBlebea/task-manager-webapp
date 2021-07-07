@@ -56,6 +56,6 @@ export default {
     },
 
     publicRuntimeConfig: {
-        baseApiUrl: process.env.BASE_API_URL || 'http://srv-captain--task-manager-api'
+        baseApiUrl: process.env.BASE_API_URL || 'https://task-manager-api.cap-rover.purpletreetech.com/api/v1'
     }
 }
