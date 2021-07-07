@@ -8,7 +8,7 @@ export default function ({ $axios }, inject) {
     })
 
     // Set baseURL to something different
-    api.setBaseURL('http://localhost:8087/api/v1')
+    api.setBaseURL(process.env.BASE_API_URL)
 
     // Inject to context as $api
     inject('api', api)
