@@ -56,6 +56,6 @@ export default {
     },
 
     publicRuntimeConfig: {
-        baseApiUrl: process.env.BASE_API_URL
-    },
+        baseApiUrl: process.env.BASE_API_URL || 'http://localhost:3000'
+    }
 }
