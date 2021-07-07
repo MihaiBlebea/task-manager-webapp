@@ -56,6 +56,6 @@ export default {
     },
 
     publicRuntimeConfig: {
-        baseApiUrl: process.env.BASE_API_URL || 'http://localhost:3000'
+        baseApiUrl: process.env.BASE_API_URL || 'srv-captain--task-manager-api'
     }
 }
