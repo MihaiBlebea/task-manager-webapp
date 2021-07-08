@@ -1,27 +1,41 @@
 <template>
     <Background>
-        <CenterCard>
-            <h1>Title</h1>
-        </CenterCard>
+        <Main>
+            <div class="row">
+                <div class="col-md-4 bg-danger p-2">
+                    ceva
+                </div>
+                <div class="col-md-8 p-2">
+                    altceva
+                </div>
+            </div>
+        </Main>
     </Background>
 </template>
 
 <script>
-import CenterCard from '/layouts/CenterCard.vue'
+import { mapGetters } from 'vuex'
+import Main from '/layouts/Main.vue'
 import Background from '/layouts/Background.vue'
 export default {
     components: {
         Background,
-        CenterCard
+        Main
     },
     data: function() {
         return {
 
         }
     },
-    mounted: async function() {
-        let result = await this.$api.get('/health-check')
-        console.log(result)
+    computed: {
+        ...mapGetters({
+            token: 'token'
+        })
+    },
+    mounted: function() {
+        // if (this.token === null) {
+        //     this.$router.push('/login')
+        // }
     }
 }
 </script>
