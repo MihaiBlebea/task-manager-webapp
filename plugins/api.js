@@ -1,8 +1,9 @@
-export default function ({ $axios, $config }, inject) {
+export default function ({ $axios, $config, store }, inject) {
     const api = $axios.create({
         headers: {
             common: {
-                Accept: 'application/json, */*'
+                Accept: 'application/json, */*',
+                Authorization: 'Bearer ' + store.getters.token
             }
         }
     })

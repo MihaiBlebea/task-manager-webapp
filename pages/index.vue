@@ -3,10 +3,14 @@
         <Main>
             <div class="row">
                 <div class="col-md-4 bg-danger p-2">
-                    ceva
+                    <div v-for="(project, index) in projects" :key="index" v-on:click="selectProject(index)">
+                        {{ project.title }}
+                    </div>
                 </div>
                 <div class="col-md-8 p-2">
-                    altceva
+                    <div v-for="(task, index) in tasks" :key="index">
+                        {{ task.title }}
+                    </div>
                 </div>
             </div>
         </Main>
@@ -14,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Main from '/layouts/Main.vue'
 import Background from '/layouts/Background.vue'
 export default {
@@ -29,13 +33,19 @@ export default {
     },
     computed: {
         ...mapGetters({
-            token: 'token'
+            token: 'token',
+            projects: 'projects',
+            tasks: 'tasks'
         })
     },
-    mounted: function() {
-        // if (this.token === null) {
-        //     this.$router.push('/login')
-        // }
+    methods: {
+        ...mapActions({
+            getProjects: 'getProjects',
+            selectProject: 'selectProject'
+        }),
+    },
+    mounted: async function() {
+        await this.getProjects()
     }
 }
 </script>
