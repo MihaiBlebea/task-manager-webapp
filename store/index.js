@@ -130,11 +130,10 @@ const createStore = () => {
                     commit('storeProjects', [])
                 }
             },
-            getProjectTasks: async function ({ commit, state }) 
+            getProjectTasks: async function ({ commit, getters }) 
             {
                 try {
-                    let project = state.projects[state.selectedProject]
-                    console.log("Project, id" + project.id + " " +state.selectedProject)
+                    let project = getters.selectedProject
                     let result = await this.$api.get('/project/' + project.id)
 
                     if (result.status !== 200) {
@@ -149,10 +148,8 @@ const createStore = () => {
             },
             selectProject: function ({ commit, dispatch, state }, index)
             {
-                console.log(index)
                 commit('storeProjectIndex', index)
                 dispatch('getProjectTasks')
-                console.log(state)
             }
         },
         getters: {
@@ -167,6 +164,10 @@ const createStore = () => {
             projects: function(state)
             {
                 return state.projects
+            },
+            selectedProject: function(state)
+            {
+                return state.projects[state.selectedProject]
             },
             tasks: function(state)
             {

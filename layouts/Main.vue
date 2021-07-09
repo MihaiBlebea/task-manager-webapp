@@ -2,7 +2,7 @@
     <div class="w-100 h-full container">
         <div class="row h-full justify-content-center align-items-center flex-3">
             <div class="card col-md-8 p-0">
-                <Navigation />
+                <navigation />
                 <div class="card-body p-0 px-3">
                     <slot></slot>
                 </div>
@@ -15,8 +15,9 @@
 import Navigation from '/components/Navigation'
 export default {
     components: {
-        Navigation
-    }
+        'navigation': Navigation
+    },
+    name: 'main-center'
 }
 </script>
 

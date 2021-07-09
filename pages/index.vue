@@ -1,9 +1,13 @@
 <template>
-    <Background>
-        <Main>
+    <background>
+        <main-pannel>
             <div class="row">
                 <div class="col-md-4 bg-danger p-2">
-                    <div v-for="(project, index) in projects" :key="index" v-on:click="selectProject(index)">
+                    <div class="clickable" 
+                        v-for="(project, index) in projects" 
+                        :key="index" 
+                        v-on:click="selectProject(index)"
+                    >
                         {{ project.title }}
                     </div>
                 </div>
@@ -13,8 +17,8 @@
                     </div>
                 </div>
             </div>
-        </Main>
-    </Background>
+        </main-pannel>
+    </background>
 </template>
 
 <script>
@@ -23,8 +27,8 @@ import Main from '/layouts/Main.vue'
 import Background from '/layouts/Background.vue'
 export default {
     components: {
-        Background,
-        Main
+        'background': Background,
+        'main-pannel': Main
     },
     data: function() {
         return {
@@ -49,3 +53,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.clickable {
+    cursor: pointer;
+}
+</style>
