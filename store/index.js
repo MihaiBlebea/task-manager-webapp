@@ -64,6 +64,10 @@ const createStore = () => {
             }
         },
         actions: {
+            nuxtClientInit: async function({ dispatch }) 
+            {
+                await dispatch('getProjects')
+            },
             register: async function ({ commit }, { username: username, email: email, password: password }) 
             {
                 try {
@@ -91,7 +95,7 @@ const createStore = () => {
                     })
                 }
             },
-            login: async function ({ commit }, { email: email, password: password }) 
+            login: async function ({ commit, dispatch }, { email: email, password: password }) 
             {
                 try {
                     let result = await this.$api.post('/user/login', {
@@ -108,6 +112,7 @@ const createStore = () => {
                         id: result.data.id 
                     })
                     
+                    await dispatch('getProjects')
                     this.$router.push('/')
                 } catch(e) {
                     console.error(e)
@@ -116,6 +121,14 @@ const createStore = () => {
                         id: null
                     })
                 }
+            },
+            logout: function({ commit })
+            {
+                commit('login', { 
+                    token: null, 
+                    id: null
+                })
+                this.$router.push('/login')
             },
             getProjects: async function ({ commit, state }) 
             {
@@ -134,6 +147,49 @@ const createStore = () => {
                 } catch(e) {
                     console.error(e)
                     commit('storeProjects', [])
+                }
+            },
+            createNewProject: async function ({ dispatch }, { title, description, color, icon }) 
+            {
+                try {
+                    let result = await this.$api.post('/project', { title, description, color, icon })
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    dispatch('getProjects')
+                    this.$router.push('/home')
+                } catch(e) {
+                    console.error(e)
+                }
+            },
+            updateProject: async function ({ commit }, { id, title, description, color, icon }) 
+            {
+                try {
+                    let result = await this.$api.put('/project/' + id, { title, description, color, icon })
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    this.$router.push('/home')
+                } catch(e) {
+                    console.error(e)
+                }
+            },
+            removeProject: async function ({ dispatch }, { id })
+            {
+                try {
+                    let result = await this.$api.delete('/project/' + id)
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    dispatch('getProjects')
+                } catch(e) {
+                    console.error(e)
                 }
             },
             getProjectTasks: async function ({ commit, getters }) 
@@ -156,6 +212,25 @@ const createStore = () => {
             {
                 commit('storeProjectIndex', index)
                 dispatch('getProjectTasks')
+            },
+            createNewTask: async function({ dispatch, getters }, { parentTaskId, title })
+            {
+                try {
+                    let project = getters.selectedProject
+                    let result = await this.$api.post('/task', {
+                        project_id: project.id,
+                        subtask_id: parentTaskId,
+                        title: title
+                    })
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    dispatch('getProjectTasks')
+                } catch(e) {
+                    console.error(e)
+                }
             }
         },
         getters: {

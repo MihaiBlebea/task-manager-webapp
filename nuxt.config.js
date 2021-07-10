@@ -24,6 +24,7 @@ export default {
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
+        '~/static/global.css'
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -37,8 +38,15 @@ export default {
 
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
     buildModules: [
-        '@nuxtjs/dotenv'
+        '@nuxtjs/dotenv',
+        '@nuxtjs/fontawesome'
     ],
+    
+    fontawesome: {
+        icons: {
+            solid: ['faCog', 'faHome', 'faCalendarPlus', 'faAdjust', 'faCalendarTimes', 'faDoorClosed', 'faAngleDown']
+        }
+    },
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
@@ -46,6 +54,8 @@ export default {
         'bootstrap-vue/nuxt',
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        // https://www.npmjs.com/package/nuxt-client-init-module
+        'nuxt-client-init-module'
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -57,5 +67,9 @@ export default {
 
     publicRuntimeConfig: {
         baseApiUrl: process.env.BASE_API_URL || 'https://task-manager-api.cap-rover.purpletreetech.com/api/v1'
+    },
+
+    router: {
+        middleware: ['authMiddleware']
     }
 }

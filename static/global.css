@@ -1,0 +1,8 @@
+body {
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.h-full {
+    height: 100vh;
+}
