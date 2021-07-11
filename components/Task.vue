@@ -3,13 +3,20 @@
         <div class="card-body p-2">
             <div 
                 class="d-flex justify-content-between align-items-center" 
-                v-show="state === 0" 
-                v-on:click="handleClick"
+                v-show="state === 0"
             >
-                {{ taskTitle }}
+                <div 
+                    class="clickable" 
+                    v-show="state === 0" 
+                    v-on:click="handleClick"
+                >
+                    {{ title }}
+                </div>
                 <font-awesome-icon 
-                    icon="angle-down" 
-                    v-on:click="handleExpand" 
+                    icon="backspace" 
+                    class="clickable" 
+                    v-show="state === 0" 
+                    v-on:click="removeTaskHandler" 
                 />
             </div>
             <div v-show="state === 1">
@@ -21,39 +28,19 @@
                     ref="input"
                 >
             </div>
-
-            <div v-if="expanded">
-
-                <div v-on:click="createTaskHandler">
-                    <font-awesome-icon icon="calendar-plus"/> Add task...
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-import {  mapActions } from 'vuex'
+import {  mapActions, mapGetters } from 'vuex'
 export default {
+    name: 'task',
     props: {
-        taskId: {
-            type: Number,
-            required: false
-        },
-        parentTaskId: {
-            type: Number,
+        data: {
+            type: Object,
             required: false,
             default: null
-        },
-        taskTitle: {
-            type: String,
-            required: false,
-            default: ''
-        },
-        subtasks: {
-            type: Array,
-            required: false,
-            default: () => []
         },
         initState: {
             type: Number,
@@ -66,65 +53,91 @@ export default {
         return {
             state: 0,
             clicks: 0,
-            title: this.taskTitle,
-            expanded: false
+            title: this.data ? this.data.title : ''
         }
     },
     watch: {
-        state: function(newState, oldState) {
-            console.log(newState, this.state)
+        state: function(newState, oldState) 
+        {
             if (newState === 1) {
                 this.$nextTick(() => {
                     this.focusInput()
                 })
             }
+        },
+    },
+    computed: {
+        ...mapGetters({
+            project: 'selectedProject'
+        }),
+        isUpdate: function ()
+        {
+            return this.data !== null
         }
     },
     methods: {
         ...mapActions({
-            createNewTask: 'createNewTask'
+            createNewTask: 'createNewTask',
+            removeTask: 'removeTask'
         }),
         handleClick: function()
         {
             this.clicks++
 
-            if (this.clicks == 2) {
+            if (this.clicks === 2) {
                 this.state = 1
-            }
+            } 
 
             setTimeout(() => {
+                if (this.clicks === 1) {
+                    this.navigateToTask()
+                }
                 this.clicks = 0
-            }, 1200)
+            }, 1000)
         },
         handleBlur: async function()
         {
             this.state = 0
-            if (this.title === '') {
-                this.$emit('cancel')
-            } else {
-                await this.createTaskHandler()
-                this.$emit('cancel')
+            if (this.title !== '') {
+                await this.updateTaskHandler()
             }
+
+            this.$emit('cancel')
         },
         focusInput: function()
         {
             this.$refs['input'].focus()
         },
-        createTaskHandler: async function()
+        updateTaskHandler: async function ()
+        {
+            // This is not an update, but a creation of a task
+            if (this.isUpdate === false) {
+                return await this.createTaskHandler()
+            }
+        },
+        createTaskHandler: async function ()
         {
             let payload = {
                 title: this.title
             }
 
-            if (this.parentTaskId !== null) {
-                payload.parentTaskId = this.parentTaskId
+            if (this.data !== null) {
+                payload.parentTaskId = this.data.subtask_id
             }
 
             await this.createNewTask(payload)
         },
-        handleExpand: function ()
+        removeTaskHandler: async function ()
         {
-            this.expanded = !this.expanded
+            await this.removeTask(this.data.id)
+        },
+        navigateToTask: function ()
+        {
+            if (this.data === null) {
+                return
+            }
+
+            this.$router.push('/project/' + this.data.project_id + '/task/' + this.data.id)
         }
     },
     mounted: function()

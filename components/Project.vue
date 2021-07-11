@@ -1,9 +1,15 @@
 <template>
-    <div class="d-flex justify-content-between align-items-center" v-on:click="selectProjectHandler(projectId)">
-        {{ projectTitle }}
-        <div class="d-flex align-items-center">
-            <NuxtLink class="nav-link" :to="'/home/project/' + projectId"><font-awesome-icon icon="adjust"/></NuxtLink>
-            <font-awesome-icon icon="calendar-times" v-on:click="removeProjectHandler(projectId)"/>
+    <div class="card p-0" v-on:click="selectProjectHandler">
+        <div class="card-body p-2">
+            <h4>{{ data.title }}</h4>
+
+
+            <div class="d-flex align-items-center">
+                <NuxtLink class="nav-link" :to="'/project/' + data.id + '/update'">
+                    <font-awesome-icon icon="adjust" />
+                </NuxtLink>
+                <font-awesome-icon icon="calendar-times" v-on:click="removeProjectHandler"/>
+            </div>
         </div>
     </div>
 </template>
@@ -12,15 +18,10 @@
 import {  mapActions, mapGetters } from 'vuex'
 export default {
     props: {
-        projectId: {
-            type: Number,
-            required: false
-        },
-        projectTitle: {
-            type: String,
-            required: false,
-            default: ''
-        },
+        data: {
+            type: Object,
+            required: true
+        }
     },
     computed: {
         ...mapGetters({
@@ -32,20 +33,13 @@ export default {
             selectProject: 'selectProject',
             removeProject: 'removeProject'
         }),
-        selectProjectHandler: async function (projectId)
+        selectProjectHandler: function ()
         {
-            let found = 0
-            this.projects.forEach((project, index) => {
-                if (project.id === projectId) {
-                    found = index
-                }
-            })
-
-            await this.selectProject(found)
+            this.$router.push('/project/' + this.data.id)
         },
-        removeProjectHandler: async function (projectId)
+        removeProjectHandler: async function ()
         {
-            await this.removeProject({ id: projectId })
+            await this.removeProject({ id: this.data.id })
         }
     }
 }

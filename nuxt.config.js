@@ -44,7 +44,17 @@ export default {
     
     fontawesome: {
         icons: {
-            solid: ['faCog', 'faHome', 'faCalendarPlus', 'faAdjust', 'faCalendarTimes', 'faDoorClosed', 'faAngleDown']
+            solid: [
+                'faCog', 
+                'faHome', 
+                'faCalendarPlus', 
+                'faAdjust', 
+                'faCalendarTimes', 
+                'faDoorClosed', 
+                'faAngleLeft', 
+                'faAngleDown', 
+                'faBackspace'
+            ]
         }
     },
 

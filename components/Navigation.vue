@@ -5,10 +5,10 @@
             <div>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <NuxtLink class="nav-link" to="/home"><font-awesome-icon icon="home"/></NuxtLink>
+                        <NuxtLink class="nav-link" to="/"><font-awesome-icon icon="home"/></NuxtLink>
                     </li>
                     <li class="nav-item">
-                        <NuxtLink class="nav-link" to="/home/project"><font-awesome-icon icon="calendar-plus"/></NuxtLink>
+                        <NuxtLink class="nav-link" to="/project"><font-awesome-icon icon="calendar-plus"/></NuxtLink>
                     </li>
                     <li class="nav-item">
                         <div class="nav-link" v-on:click="logoutHandler"><font-awesome-icon icon="door-closed"/></div>
