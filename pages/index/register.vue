@@ -1,28 +1,26 @@
 <template>
-    <Background>
-        <CenterCard>
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" v-model="username">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email address</label>
-                <input type="email" class="form-control" v-model="email">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" v-model="password">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Confirm password</label>
-                <input type="password" class="form-control" v-model="passwordConfirm">
-            </div>
-            <div class="px-3 row justify-content-between align-items-center">
-                <button class="btn btn-primary" v-on:click="registerHandler">Register</button>
-                <div class="clickable" v-on:click="loginNavHandler">Login</div>
-            </div>
-        </CenterCard>
-    </Background>
+    <div>
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" v-model="username">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email address</label>
+            <input type="email" class="form-control" v-model="email">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" v-model="password">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Confirm password</label>
+            <input type="password" class="form-control" v-model="passwordConfirm">
+        </div>
+        <div class="px-3 row justify-content-between align-items-center">
+            <button class="btn btn-primary" v-on:click="registerHandler">Register</button>
+            <div class="clickable" v-on:click="loginNavHandler">Login</div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -63,17 +61,7 @@ export default {
         {
             this.$router.push('/login')
         }
-    },
-    mounted: function() {
-        if (this.token !== null) {
-            this.$router.push('/')
-        }
     }
 }
 </script>
 
-<style scoped>
-.clickable {
-    cursor: pointer;
-}
-</style>
