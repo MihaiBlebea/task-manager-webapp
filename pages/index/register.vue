@@ -25,13 +25,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import CenterCard from '/layouts/CenterCard.vue'
-import Background from '/layouts/Background.vue'
 export default {
-    components: {
-        Background,
-        CenterCard
-    },
     data: function() {
         return {
             username: '',

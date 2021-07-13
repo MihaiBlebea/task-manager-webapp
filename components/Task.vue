@@ -10,7 +10,7 @@
                     v-show="state === 0" 
                     v-on:click="handleClick"
                 >
-                    {{ title }}
+                    <span v-if="data">{{ data.id }}</span> - {{ title }}
                 </div>
                 <font-awesome-icon 
                     icon="backspace" 
@@ -37,6 +37,10 @@ import {  mapActions, mapGetters } from 'vuex'
 export default {
     name: 'task',
     props: {
+        projectId: {
+            type: Number,
+            required: true
+        },
         data: {
             type: Object,
             required: false,
@@ -108,6 +112,10 @@ export default {
         {
             this.$refs['input'].focus()
         },
+        blurInput: function ()
+        {
+            this.$refs['input'].blur()
+        },
         updateTaskHandler: async function ()
         {
             // This is not an update, but a creation of a task
@@ -118,6 +126,7 @@ export default {
         createTaskHandler: async function ()
         {
             let payload = {
+                projectId: this.projectId,
                 title: this.title
             }
 
@@ -129,7 +138,11 @@ export default {
         },
         removeTaskHandler: async function ()
         {
-            await this.removeTask(this.data.id)
+            if (this.data === null) {
+                return 
+            }
+
+            await this.removeTask({ id: this.data.id })
         },
         navigateToTask: function ()
         {
@@ -145,6 +158,13 @@ export default {
         if (this.initState !== 0) {
             this.state = this.initState
         }
+
+        this.$refs.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                console.log('pressed enter')
+                this.blurInput()
+            }
+        })
     }
 }
 </script>

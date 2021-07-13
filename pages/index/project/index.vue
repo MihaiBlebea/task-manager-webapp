@@ -7,17 +7,32 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea class="form-control" rows="3" v-model="description"></textarea>
+                <textarea 
+                    class="form-control" 
+                    rows="3" 
+                    v-model="description"
+                ></textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label">Color</label>
-                <input type="color" class="form-control form-control-color clickable" title="Choose your color" v-model="color">
+                <input 
+                    type="color" 
+                    class="form-control form-control-color clickable" 
+                    title="Choose your color" 
+                    v-model="color"
+                >
             </div>
             <div class="mb-3">
-                <label class="form-label">Icon</label>
-                <input type="text" class="form-control" v-model="icon">
+                <!-- <label class="form-label">Icon2</label> -->
+                <!-- <input type="text" class="form-control" v-model="icon"> -->
+                <select class="form-select" aria-label="Default select example" v-model="icon">
+                    <option selected>Open this select menu</option>
+                    <option value="home">home</option>
+                    <option value="cog">cog</option>
+                    <option value="3">Three</option>
+                </select>
             </div>
-            <button class="btn btn-primary" v-on:click="submitHandler">Save</button>
+            <button class="btn btn-primary" v-on:click="submitHandler">Update</button>
         </div>
     </div>
 </template>
@@ -51,10 +66,6 @@ export default {
 </script>
 
 <style scoped>
-.clickable {
-    cursor: pointer;
-}
-
 .form-control-color {
     width: 40px;
 }

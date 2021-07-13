@@ -23,8 +23,14 @@
                 >
             </div>
             <div class="mb-3">
-                <label class="form-label">Icon</label>
-                <input type="text" class="form-control" v-model="icon">
+                <label class="form-label">Icon2</label>
+                <!-- <input type="text" class="form-control" v-model="icon"> -->
+                <select class="form-select" aria-label="Default select example" v-model="icon">
+                    <option selected>Open this select menu</option>
+                    <option value="home"><font-awesome-icon icon="home" /></option>
+                    <option value="cog"><font-awesome-icon icon="cog" /></option>
+                    <option value="3">Three</option>
+                </select>
             </div>
             <button class="btn btn-primary" v-on:click="submitHandler">Update</button>
         </div>
@@ -43,7 +49,7 @@ export default {
             title: '',
             description: '',
             color: '',
-            icon: ''
+            icon: 'home'
         }
     },
     computed: {

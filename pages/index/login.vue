@@ -44,11 +44,6 @@ export default {
         {
             this.$router.push('/register')
         }
-    },
-    // mounted: async function() {
-    //     if (this.token !== null) {
-    //         this.$router.push('/')
-    //     }
-    // }
+    }
 }
 </script>

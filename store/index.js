@@ -206,12 +206,11 @@ const createStore = () => {
                     console.error(e)
                 }
             },
-            createNewTask: async function({ dispatch, getters }, { parentTaskId, title })
+            createNewTask: async function({ dispatch, getters }, { projectId, parentTaskId, title })
             {
                 try {
-                    let project = getters.selectedProject
                     let result = await this.$api.post('/task', {
-                        project_id: project.id,
+                        project_id: projectId,
                         subtask_id: parentTaskId,
                         title: title
                     })
@@ -220,13 +219,14 @@ const createStore = () => {
                         throw Error(reuslt.data.message)
                     }
 
-                    dispatch('getProjectTasks')
+                    dispatch('getProjects')
                 } catch(e) {
                     console.error(e)
                 }
             },
-            removeTask: async function({ dispatch, getters }, id)
+            removeTask: async function({ dispatch, getters }, { id })
             {
+                console.log("removing task with id " + id)
                 try {
                     let result = await this.$api.delete('/task/' + id)
 
@@ -234,7 +234,7 @@ const createStore = () => {
                         throw Error(reuslt.data.message)
                     }
 
-                    dispatch('getProjectTasks')
+                    await dispatch('getProjects')
                 } catch(e) {
                     console.error(e)
                 }

@@ -1,6 +1,9 @@
 <template>
     <div class="card p-0" v-on:click="selectProjectHandler">
         <div class="card-body p-2">
+
+            <font-awesome-icon :icon="data.icon" />
+
             <h4>{{ data.title }}</h4>
 
 
