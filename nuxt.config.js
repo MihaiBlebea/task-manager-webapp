@@ -39,7 +39,8 @@ export default {
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
     buildModules: [
         '@nuxtjs/dotenv',
-        '@nuxtjs/fontawesome'
+        '@nuxtjs/fontawesome',
+        '@nuxtjs/svg'
     ],
     
     fontawesome: {
@@ -53,7 +54,8 @@ export default {
                 'faDoorClosed', 
                 'faAngleLeft', 
                 'faAngleDown', 
-                'faBackspace'
+                'faBackspace',
+                'faCheckCircle'
             ]
         }
     },

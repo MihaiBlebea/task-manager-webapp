@@ -26,8 +26,8 @@ const createStore = () => {
             token: localStorage.getItem('user-token') || null,
             userId: getUserIdFromToken(localStorage.getItem('user-token')) || null,
             projects: [],
-            selectedProject: 0,
             tasks: [],
+            subtasks: [],
         },
         mutations: {
             register(state, { token, id }) 
@@ -53,14 +53,27 @@ const createStore = () => {
             storeProjects(state, projects) 
             {
                 state.projects = projects
-            },
-            storeTasks(state, tasks) 
-            {
-                state.tasks = tasks
-            },
-            storeProjectIndex(state, index)
-            {
-                state.selectedProject = index
+                state.tasks = []
+                state.subtasks = []
+
+                projects.forEach(project => {
+                    if (project.tasks === null) {
+                        return
+                    }
+
+                    project.tasks.forEach(task => {
+                        state.tasks.push(task)
+
+                        if (task.subtasks === null) {
+                            return
+                        }
+
+                        task.subtasks.forEach(subtask => {
+                            state.subtasks.push(subtask)
+                        })
+                    })
+                    
+                })
             }
         },
         actions: {
@@ -143,20 +156,7 @@ const createStore = () => {
                         throw Error(reuslt.data.message)
                     }
 
-                    let projects = result.data.data
-
-                    let details = []
-                    for (let i = 0; i < projects.length; i++) {
-                        let project = projects[i]
-                        let res = await this.$api.get('/project/' + project.id)
-
-                        if (res.status !== 200) {
-                            throw Error(res.data.message)
-                        }
-                        details.push(res.data.data)
-                    }
-
-                    commit('storeProjects', details)
+                    commit('storeProjects', result.data.data)
                 } catch(e) {
                     console.error(e)
                     commit('storeProjects', [])
@@ -177,7 +177,7 @@ const createStore = () => {
                     console.error(e)
                 }
             },
-            updateProject: async function ({ commit }, { id, title, description, color, icon }) 
+            updateProject: async function ({ dispatch }, { id, title, description, color, icon }) 
             {
                 try {
                     let result = await this.$api.put('/project/' + id, { title, description, color, icon })
@@ -186,7 +186,8 @@ const createStore = () => {
                         throw Error(reuslt.data.message)
                     }
 
-                    this.$router.push('/home')
+                    dispatch('getProjects')
+                    this.$router.push('/')
                 } catch(e) {
                     console.error(e)
                 }
@@ -206,7 +207,7 @@ const createStore = () => {
                     console.error(e)
                 }
             },
-            createNewTask: async function({ dispatch, getters }, { projectId, parentTaskId, title })
+            createNewTask: async function({ dispatch }, { projectId, parentTaskId, title })
             {
                 try {
                     let result = await this.$api.post('/task', {
@@ -224,11 +225,24 @@ const createStore = () => {
                     console.error(e)
                 }
             },
-            removeTask: async function({ dispatch, getters }, { id })
+            removeTask: async function({ dispatch }, { id })
             {
-                console.log("removing task with id " + id)
                 try {
                     let result = await this.$api.delete('/task/' + id)
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    await dispatch('getProjects')
+                } catch(e) {
+                    console.error(e)
+                }
+            },
+            completeTask: async function({ dispatch }, { id })
+            {
+                try {
+                    let result = await this.$api.put('/task/complete/' + id)
 
                     if (result.status !== 200) {
                         throw Error(reuslt.data.message)
@@ -270,28 +284,23 @@ const createStore = () => {
             task: function(state) 
             {
                 return (projectId, taskId) => {
-                    let found = state.projects.filter((project) => {
-                        return project.id === projectId
+                    let found = state.tasks.filter(task => {
+                        return task.id === taskId && task.project_id === projectId
                     })
-        
+
                     if (found.length === 0) {
                         return null
                     }
-        
-                    let project = found[0]
-                    if (project.tasks.length === 0) {
-                        return null
-                    }
 
-                    let foundTask = project.tasks.filter((task) => {
-                        return task.id === taskId
+                    return found[0]
+                }
+            },
+            tasks: function (state)
+            {
+                return (projectId) => {
+                    return state.tasks.filter(task => {
+                        return task.project_id === projectId
                     })
-
-                    if (foundTask.length === 0) {
-                        return null
-                    }
-
-                    return foundTask[0]
                 }
             }
         }

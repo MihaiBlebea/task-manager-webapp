@@ -12,12 +12,20 @@
                 >
                     <span v-if="data">{{ data.id }}</span> - {{ title }}
                 </div>
-                <font-awesome-icon 
-                    icon="backspace" 
-                    class="clickable" 
-                    v-show="state === 0" 
-                    v-on:click="removeTaskHandler" 
-                />
+                <div>
+                    <font-awesome-icon 
+                        icon="check-circle" 
+                        class="clickable mr-2" 
+                        v-show="state === 0" 
+                        v-on:click="completeTaskHandler" 
+                    />
+                    <font-awesome-icon 
+                        icon="backspace" 
+                        class="clickable" 
+                        v-show="state === 0" 
+                        v-on:click="removeTaskHandler" 
+                    />
+                </div>
             </div>
             <div v-show="state === 1">
                 <input 
@@ -61,7 +69,7 @@ export default {
         }
     },
     watch: {
-        state: function(newState, oldState) 
+        state: function(newState, _oldState) 
         {
             if (newState === 1) {
                 this.$nextTick(() => {
@@ -82,7 +90,8 @@ export default {
     methods: {
         ...mapActions({
             createNewTask: 'createNewTask',
-            removeTask: 'removeTask'
+            removeTask: 'removeTask',
+            completeTask: 'completeTask'
         }),
         handleClick: function()
         {
@@ -143,6 +152,14 @@ export default {
             }
 
             await this.removeTask({ id: this.data.id })
+        },
+        completeTaskHandler: async function ()
+        {
+            if (this.data === null) {
+                return 
+            }
+
+            await this.completeTask({ id: this.data.id })
         },
         navigateToTask: function ()
         {

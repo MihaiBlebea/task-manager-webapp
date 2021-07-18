@@ -10,7 +10,7 @@
         </h2>
         <p>{{ project.description }}</p>
 
-        <div class="mb-2" v-for="(task, index) in project.tasks" :key="task.id + '_' + index">
+        <div class="mb-2" v-for="(task, index) in incompleteTasks" :key="task.id + '_' + index">
             <task :project-id="id" :data="task" />
         </div>
 
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Task from '~/components/Task.vue'
 export default {
     async asyncData({ params }) {
@@ -48,11 +48,24 @@ export default {
     computed: {
         ...mapGetters({
             projects: 'projects',
-            projectFinder: 'project'
+            projectFinder: 'project',
+            tasks: 'tasks'
         }),
         project: function ()
         {
             return this.projectFinder(this.id)
+        },
+        completedTasks: function ()
+        {
+            return this.tasks(this.id).filter((task) => {
+                return task.completed == true
+            })
+        },
+        incompleteTasks: function ()
+        {
+            return this.tasks(this.id).filter((task) => {
+                return task.completed == false
+            })
         }
     },
     methods: {
