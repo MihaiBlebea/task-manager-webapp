@@ -23,7 +23,7 @@
                 >
             </div>
             <div class="mb-3">
-                <label class="form-label">Icon2</label>
+                <label class="form-label">Icon</label>
                 <!-- <input type="text" class="form-control" v-model="icon"> -->
                 <select class="form-select" aria-label="Default select example" v-model="icon">
                     <option selected>Open this select menu</option>
@@ -32,7 +32,7 @@
                     <option value="3">Three</option>
                 </select>
             </div>
-            <button class="btn btn-primary" v-on:click="submitHandler">Update</button>
+            <button class="btn btn-primary" v-on:click="submitHandler">{{ submitButtonLabel }}</button>
         </div>
     </div>
 </template>
@@ -42,6 +42,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
     async asyncData({ params }) {
         const id = params.projectId
+        if (id === undefined) {
+            return { id: null }
+        }
+        
         return { id: parseInt(id) }
     },
     data: function() {
@@ -54,17 +58,44 @@ export default {
     },
     computed: {
         ...mapGetters({
-            projects: 'projects'
-        })
+            projects: 'projects',
+            projectFinder: 'project'
+        }),
+        project: function ()
+        {
+            if (this.isUpdate === false) {
+                return null
+            }
+
+            return this.projectFinder(this.id)
+        },
+        isUpdate: function ()
+        {
+            return this.id !== null
+        },
+        submitButtonLabel: function ()
+        {
+            return this.isUpdate ? 'Update' : 'Create'
+        }
     },
     methods: {
         ...mapActions({
-            updateProject: 'updateProject'
+            updateProject: 'updateProject',
+            createProject: 'createProject'
         }),
         submitHandler: async function()
         {
-            await this.updateProject({
-                id: this.id,
+            if (this.isUpdate) {
+                return await this.updateProject({
+                    id: this.id,
+                    title: this.title,
+                    description: this.description,
+                    color: this.color,
+                    icon: this.icon
+                })
+            }
+
+            return await this.createProject({
                 title: this.title,
                 description: this.description,
                 color: this.color,
@@ -74,24 +105,14 @@ export default {
     },
     created: function ()
     {
-        let found = this.projects.filter((project) => {
-            return project.id === this.id
-        })
-
-        if (found.length === 0) {
-            return this.$router.push('/home')
+        if (this.project === null) {
+            return
         }
 
-        this.title = found[0].title
-        this.description = found[0].description
-        this.color = found[0].color
-        this.icon = found[0].icon
+        this.title = this.project.title
+        this.description = this.project.description
+        this.color = this.project.color
+        this.icon = this.project.icon
     }
 }
 </script>
-
-<style scoped>
-.clickable {
-    cursor: pointer;
-}
-</style>

@@ -82,6 +82,15 @@ export default {
     },
 
     router: {
-        middleware: ['authMiddleware']
+        middleware: ['authMiddleware'],
+        extendRoutes (routes, resolve) {
+            routes.push(
+                {
+                    name: 'project-new',
+                    path: '/project/editor',
+                    component: '~/pages/index/project/editor/_projectId.vue'
+                }
+            )
+        }
     }
 }

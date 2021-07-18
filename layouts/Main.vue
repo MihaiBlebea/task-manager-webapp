@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="card col-md-8 p-0">
                 <navigation />
-                <div class="card-body p-0 px-3">
+                <div class="card-body p-0 p-3">
                     <slot></slot>
                 </div>
             </div>

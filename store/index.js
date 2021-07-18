@@ -162,7 +162,7 @@ const createStore = () => {
                     commit('storeProjects', [])
                 }
             },
-            createNewProject: async function ({ dispatch }, { title, description, color, icon }) 
+            createProject: async function ({ dispatch }, { title, description, color, icon }) 
             {
                 try {
                     let result = await this.$api.post('/project', { title, description, color, icon })
@@ -214,6 +214,23 @@ const createStore = () => {
                         project_id: projectId,
                         subtask_id: parentTaskId,
                         title: title
+                    })
+
+                    if (result.status !== 200) {
+                        throw Error(reuslt.data.message)
+                    }
+
+                    dispatch('getProjects')
+                } catch(e) {
+                    console.error(e)
+                }
+            },
+            updateTask: async function({ dispatch }, { taskId, title, note })
+            {
+                try {
+                    let result = await this.$api.put('/task/' + taskId, {
+                        title: title,
+                        note: note
                     })
 
                     if (result.status !== 200) {

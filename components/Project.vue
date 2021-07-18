@@ -1,17 +1,12 @@
 <template>
-    <div class="card p-0" v-on:click="selectProjectHandler">
+    <div class="card p-0">
         <div class="card-body p-2">
 
-            <font-awesome-icon :icon="data.icon" />
-
-            <h4>{{ data.title }}</h4>
-
+            <h4 class="text-center" v-on:click="selectProjectHandler">{{ data.title }}</h4>
 
             <div class="d-flex align-items-center">
-                <NuxtLink class="nav-link" :to="'/project/' + data.id + '/update'">
-                    <font-awesome-icon icon="adjust" />
-                </NuxtLink>
-                <font-awesome-icon icon="calendar-times" v-on:click="removeProjectHandler"/>
+                <font-awesome-icon icon="adjust" class="clickable mr-3" v-on:click="editProjectHandler"/>
+                <font-awesome-icon icon="calendar-times" class="clickable" v-on:click="removeProjectHandler"/>
             </div>
         </div>
     </div>
@@ -43,7 +38,15 @@ export default {
         removeProjectHandler: async function ()
         {
             await this.removeProject({ id: this.data.id })
+        },
+        editProjectHandler: function ()
+        {
+            this.$router.push('/project/editor/' + this.data.id)
         }
     }
 }
 </script>
+
+<style scoped>
+
+</style>

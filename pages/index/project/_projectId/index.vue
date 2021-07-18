@@ -6,9 +6,11 @@
                 class="clickable" 
                 v-on:click="$router.push('/')" 
             />
-            {{ project.title }}
+            {{ project.title }} project
         </h2>
+
         <p>{{ project.description }}</p>
+        <p>Tasks:</p>
 
         <div class="mb-2" v-for="(task, index) in incompleteTasks" :key="task.id + '_' + index">
             <task :project-id="id" :data="task" />
